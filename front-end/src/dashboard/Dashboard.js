@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { listReservations } from "../utils/api";
 import { previous, next, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
+import ReservationTable from "./ReservationTable";
 
 /**
  * Defines the dashboard page.
@@ -49,7 +50,7 @@ function Dashboard({ date, setDate }) {
       {console.log("RESERVATIONS",reservations)}
       {JSON.stringify(reservations) === "[]"
         ? "There are no reservatons for this date."
-        : JSON.stringify(reservations)}
+        : <ReservationTable  reservations = {reservations} />}
       <div>
         <button onClick={handleDate} value="previousDate">
           previous
