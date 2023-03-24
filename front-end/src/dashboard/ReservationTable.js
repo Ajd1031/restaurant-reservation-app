@@ -1,10 +1,9 @@
 import React from "react";
-
 import ReservationList from "./ReservationList";
-
+//Creates a table to hold the information for reservations
 function ReservationTable({ reservations }) {
   return (
-    <div className="recipe-list">
+    <div>
       <table>
         <thead>
           <tr>
@@ -15,7 +14,7 @@ function ReservationTable({ reservations }) {
           </tr>
         </thead>
         <tbody>
-          <ReservationList reservations = {reservations} />
+          <ReservationList reservations={reservations} />
         </tbody>
       </table>
     </div>

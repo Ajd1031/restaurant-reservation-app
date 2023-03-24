@@ -67,3 +67,24 @@ export async function listReservations(params, signal) {
     .then(formatReservationDate)
     .then(formatReservationTime);
 }
+
+/**
+ * Creates a new reservation
+ * @param newReservation
+ *  the reservation to create, which must not have an `id` property
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<Error|*>}
+ *  a promise that resolves to the new card, which will have an `id` property.
+ */
+export async function createReservation(newReservation, signal) {
+  console.log("THISISNOTWORKINGWHY")
+  const url = new URL(`${API_BASE_URL}/reservations`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({data: newReservation}),
+    signal,
+  };
+  return await fetchJson(url, options, newReservation);
+}

@@ -47,19 +47,21 @@ function Dashboard({ date, setDate }) {
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {console.log("RESERVATIONS",reservations)}
-      {JSON.stringify(reservations) === "[]"
-        ? "There are no reservatons for this date."
-        : <ReservationTable  reservations = {reservations} />}
+      {console.log("RESERVATIONS", reservations)}
+      {JSON.stringify(reservations) === "[]" ? (
+        "There are no reservatons for this date."
+      ) : (
+        <ReservationTable reservations={reservations} />
+      )}
       <div>
         <button onClick={handleDate} value="previousDate">
           previous
         </button>
-        <button onClick={handleDate} value="today">
-          today
-        </button>
         <button onClick={handleDate} value="nextDate">
           next
+        </button>
+        <button onClick={handleDate} value="today">
+          today
         </button>
       </div>
     </main>
