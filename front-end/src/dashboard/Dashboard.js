@@ -15,10 +15,8 @@ function Dashboard({ date, setDate }) {
   const [reservationsError, setReservationsError] = useState(null);
 
   useEffect(loadDashboard, [date]);
-  console.log("DATEHERE:", date);
 
   function loadDashboard() {
-    console.log("BEINGCALLED");
     const abortController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
@@ -47,7 +45,6 @@ function Dashboard({ date, setDate }) {
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
-      {console.log("RESERVATIONS", reservations)}
       {JSON.stringify(reservations) === "[]" ? (
         "There are no reservatons for this date."
       ) : (

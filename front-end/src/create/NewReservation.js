@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+//import { today } from "../utils/date-time";
 
-function NewReservation() {
+function NewReservation({ setDate }) {
   const history = useHistory();
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -16,14 +17,18 @@ function NewReservation() {
     people: 0,
   };
 
+  // sends a "put" request to the API containing the user created reservation
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("THISISNOTWORKING");
+
     const abortController = new AbortController();
     setReservationsError(null);
     createReservation(newReservation, abortController.signal).catch(
       setReservationsError
     );
+    setDate(newReservation.reservation_date);
+    history.push("/");
+    setNewReservation(initialValues);
     return () => abortController.abort();
   };
 
@@ -40,10 +45,28 @@ function NewReservation() {
     setNewReservation({ ...newReservation, [target.name]: target.value });
   };
 
+  let date = new Date(newReservation.reservation_date);
+  let today = new Date();
+  let closedError = null;
+  let futureError = null;
+  let compoundError = null;
+
+  //creates error instances if the user enters an invalid reservation date
+  if (date < today && date.getDay() === 1) {
+    compoundError = new Error("Reservatons cannot be for tuesday's & reservation must be for a future date ")
+  } else if (date.getDay() === 1) {
+     closedError = new Error("Reservatons cannot be for tuesday's")
+  } else if (date < today) {
+    futureError = new Error("Reservations must be for a future date")
+  }
+
   return (
     <div>
       <h2>New Reservation</h2>
       <ErrorAlert error={reservationsError} />
+      {compoundError === null ? null : <ErrorAlert error={compoundError} />}
+      {closedError === null ? null : <ErrorAlert error={closedError} />}
+      {futureError === null ? null : <ErrorAlert error={futureError} />}
       <form onSubmit={handleSubmit}>
         <label>First Name: </label>
         <input
@@ -78,6 +101,7 @@ function NewReservation() {
           required
           name="reservation_date"
           type="date"
+          //min={today()}
           value={newReservation.reservation_date}
           onChange={handleChange}
         />
