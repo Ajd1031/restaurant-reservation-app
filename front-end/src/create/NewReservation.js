@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-//import { today } from "../utils/date-time";
+import { today } from "../utils/date-time";
 
 function NewReservation({ setDate }) {
   const history = useHistory();
@@ -46,20 +46,39 @@ function NewReservation({ setDate }) {
   };
 
   let date = new Date(newReservation.reservation_date);
-  let today = new Date();
+  let checkToday = new Date(today());
   let closedError = null;
   let futureError = null;
   let compoundError = null;
 
   //creates error instances if the user enters an invalid reservation date
-  if (date < today && date.getDay() === 1) {
-    compoundError = new Error("Reservatons cannot be for tuesday's & reservation must be for a future date ")
+  if (date < checkToday && date.getDay() === 1) {
+    compoundError = new Error(
+      "Reservatons cannot be for tuesday's & reservation must be for a future date "
+    );
   } else if (date.getDay() === 1) {
-     closedError = new Error("Reservatons cannot be for tuesday's")
-  } else if (date < today) {
-    futureError = new Error("Reservations must be for a future date")
+    closedError = new Error("Reservatons cannot be for tuesday's");
+  } else if (date < checkToday) {
+    futureError = new Error("Reservations must be for a future date");
   }
 
+  let time = new Date(
+    newReservation.reservation_date + "," + newReservation.reservation_time
+  );
+  let openingTime = new Date(
+    `${newReservation.reservation_date} , 10:30:00`
+  );
+  let closingTime = new Date(
+    `${newReservation.reservation_date}, 21:30:00`
+  );
+
+  //creates an error instance if the user enters an invalid reservation time
+  if (time < openingTime && newReservation.reservation_time) {
+    closedError = new Error("Reservatons cannot be made before 10:30 AM");
+  } else if (time > closingTime ) {
+    futureError = new Error("Reservations cannot be made after 9:30 PM");
+  }
+  console.log("ERRORRR:", reservationsError);
   return (
     <div>
       <h2>New Reservation</h2>

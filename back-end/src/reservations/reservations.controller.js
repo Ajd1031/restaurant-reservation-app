@@ -22,7 +22,7 @@ function dateValidation(req, res, next) {
       status: 400,
       message: `reservation_date is not a valid date`,
     });
-  } else if ( date < today) {
+  } else if (date < today) {
     next({
       status: 400,
       message: `reservation must be made in the future`,
@@ -34,20 +34,33 @@ function dateValidation(req, res, next) {
     });
   } else {
     next();
-  } 
+  }
 }
 
 //Validates the reservation_time value
 function timeValidation(req, res, next) {
   const { data } = req.body;
+  let time = new Date(data.reservation_date + "," + data.reservation_time);
+  let openingTime = new Date(data.reservation_date + "," + "10:30:00");
+  let closingTime = new Date(data.reservation_date + "," + "21:30:00");
   const validHHMMstring = (str) => /^([01]?[0-9]|2[0-3]):[0-5][0-9]$/.test(str);
-  if (validHHMMstring(data.reservation_time)) {
-    next();
-  } else {
+  if (!validHHMMstring(data.reservation_time)) {
     next({
       status: 400,
       message: `reservation_time is not a valid time`,
     });
+  } else if (time < openingTime) {
+    next({
+      status: 400,
+      message: `the restaurant opens at 10:30:00`,
+    });
+  } else if (time > closingTime) {
+    next({
+      status: 400,
+      message: `reservation must be hade at least an hour before closing`,
+    });
+  } else {
+    next();
   }
 }
 
