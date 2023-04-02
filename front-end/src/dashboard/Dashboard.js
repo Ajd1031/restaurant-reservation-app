@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { listReservations } from "../utils/api";
+import { listReservations, listTables } from "../utils/api";
 import { previous, next, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
-import ReservationTable from "./ReservationTable";
+import ReservationTable from "../reservations/ReservationTable";
+import TableTable from "../tables/TableTable";
 
 /**
  * Defines the dashboard page.
@@ -13,16 +14,25 @@ import ReservationTable from "./ReservationTable";
 function Dashboard({ date, setDate }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
+  const [tables, setTables] = useState([]);
+  const [tablesError, setTablesError] = useState(null);
 
   useEffect(loadDashboard, [date]);
 
   function loadDashboard() {
     const abortController = new AbortController();
+    const tableController = new AbortController();
     setReservationsError(null);
     listReservations({ date }, abortController.signal)
       .then(setReservations)
       .catch(setReservationsError);
-    return () => abortController.abort();
+    listTables(tableController.signal).then(setTables).catch(setTablesError);
+    return () => {
+      return {
+        reservationsError: abortController.abort(),
+        tablesError: tableController.abort(),
+      };
+    };
   }
 
   //Changes which date's reservations are shown
@@ -45,6 +55,7 @@ function Dashboard({ date, setDate }) {
         <h4 className="mb-0">Reservations for {date}</h4>
       </div>
       <ErrorAlert error={reservationsError} />
+      <ErrorAlert error={tablesError} />
       {JSON.stringify(reservations) === "[]" ? (
         "There are no reservatons for this date."
       ) : (
@@ -61,6 +72,12 @@ function Dashboard({ date, setDate }) {
           today
         </button>
       </div>
+
+      {JSON.stringify(tables) === "[]" ? (
+        "There are currently no tables"
+      ) : (
+        <TableTable tables={tables} />
+      )}
     </main>
   );
 }

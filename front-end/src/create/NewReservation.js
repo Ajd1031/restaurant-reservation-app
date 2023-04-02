@@ -17,7 +17,7 @@ function NewReservation({ setDate }) {
     people: 0,
   };
 
-  // sends a "put" request to the API containing the user created reservation
+  // sends a "POST" request to the API containing the user created reservation
   const handleSubmit = (event) => {
     event.preventDefault();
 
@@ -54,7 +54,7 @@ function NewReservation({ setDate }) {
   //creates error instances if the user enters an invalid reservation date
   if (date < checkToday && date.getDay() === 1) {
     compoundError = new Error(
-      "Reservatons cannot be for tuesday's & reservation must be for a future date "
+      "Reservations cannot be for tuesday's & reservation must be for a future date "
     );
   } else if (date.getDay() === 1) {
     closedError = new Error("Reservatons cannot be for tuesday's");
@@ -78,7 +78,7 @@ function NewReservation({ setDate }) {
   } else if (time > closingTime ) {
     futureError = new Error("Reservations cannot be made after 9:30 PM");
   }
-  console.log("ERRORRR:", reservationsError);
+
   return (
     <div>
       <h2>New Reservation</h2>

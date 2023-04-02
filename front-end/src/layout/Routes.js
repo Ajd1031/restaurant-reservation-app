@@ -1,10 +1,11 @@
-import React, { useState } from "react";
-
 import { Redirect, Route, Switch } from "react-router-dom";
+import { today } from "../utils/date-time";
+import React, { useState } from "react";
+import NewSeat from "../create/NewSeat";
+import NewTables from "../create/NewTable";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import NewReservation from "../create/NewReservation";
-import { today } from "../utils/date-time";
 
 /**
  * Defines all the routes for the application.
@@ -26,8 +27,14 @@ function Routes() {
       <Route path="/dashboard">
         <Dashboard date={date} setDate={setDate} />
       </Route>
-      <Route path="/reservations/new" >
+      <Route path="/reservations/new">
         <NewReservation setDate={setDate} />
+      </Route>
+      <Route path="/tables/new">
+        <NewTables />
+      </Route>
+      <Route path="/reservations/:reservation_id/seat">
+        <NewSeat />
       </Route>
       <Route>
         <NotFound />

@@ -1,5 +1,4 @@
 import React from "react";
-//import formatReservationTime from "../utils/format-reservation-time";
 //creates the list of reservations based on the data received from the API
 function ReservationList({ reservations }) {
   if (reservations.length > 0) {
@@ -11,6 +10,11 @@ function ReservationList({ reservations }) {
           <td>{reservation.mobile_number}</td>
           <td>{reservation.reservation_time}</td>
           <td>{reservation.people}</td>
+          <td>
+            <a href={`reservations/${reservation.reservation_id}/seat`}>
+              <button>Seat</button>
+            </a>
+          </td>
         </tr>
       );
     });

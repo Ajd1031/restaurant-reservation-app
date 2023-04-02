@@ -53,9 +53,9 @@ async function fetchJson(url, options, onCancel) {
 }
 
 /**
- * Retrieves all existing reservation.
+ * Retrieves all existing reservations.
  * @returns {Promise<[reservation]>}
- *  a promise that resolves to a possibly empty array of reservation saved in the database.
+ *  a promise that resolves to a possibly empty array of reservations saved in the database.
  */
 
 export async function listReservations(params, signal) {
@@ -75,16 +75,46 @@ export async function listReservations(params, signal) {
  * @param signal
  *  optional AbortController.signal
  * @returns {Promise<Error|*>}
- *  a promise that resolves to the new card, which will have an `id` property.
+ *  a promise that resolves to the new reservation, which will have an `id` property.
  */
 export async function createReservation(newReservation, signal) {
-  console.log("THISISNOTWORKINGWHY")
   const url = new URL(`${API_BASE_URL}/reservations`);
   const options = {
     method: "POST",
     headers,
-    body: JSON.stringify({data: newReservation}),
+    body: JSON.stringify({ data: newReservation }),
     signal,
   };
   return await fetchJson(url, options, newReservation);
+}
+
+/**
+ * Creates a new table
+ * @param newTable
+ *  the table to create, which must not have an `id` property
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<Error|*>}
+ *  a promise that resolves to the new table, which will have an `id` property.
+ */
+export async function createTable(newTable, signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  const options = {
+    method: "POST",
+    headers,
+    body: JSON.stringify({ data: newTable }),
+    signal,
+  };
+  return await fetchJson(url, options, newTable);
+}
+
+/**
+ * Retrieves all existing tables.
+ * @returns {Promise<[table]>}
+ *  a promise that resolves to a possibly empty array of tables saved in the database.
+ */
+
+export async function listTables(signal) {
+  const url = new URL(`${API_BASE_URL}/tables`);
+  return await fetchJson(url, { headers, signal }, []);
 }
