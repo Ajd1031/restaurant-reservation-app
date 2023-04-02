@@ -2,7 +2,7 @@ const service = require("./reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 
-//List handler for reservation resources
+//List all reservations
 async function list(req, res) {
   const { date } = req.query;
   console.log("DATE:", date);
@@ -88,6 +88,21 @@ const hasRequiredProperties = hasProperties(
   "people"
 );
 
+//Validates that the reservation_id exists
+async function reservationExists(req, res, next) {
+  const reservationId = req.params.reservationId;
+  const foundReservation = await service.read(reservationId);
+
+  if (foundReservation) {
+    res.status(200).json({ data: foundReservation });
+  } else {
+    next({
+      status: 404,
+      message: "reservation_id does not exist",
+    });
+  }
+}
+
 //Creates a new reservation
 async function create(req, res) {
   console.log("DATA:", req.body.data);
@@ -104,4 +119,5 @@ module.exports = {
     dateValidation,
     asyncErrorBoundary(create),
   ],
+  read: asyncErrorBoundary(reservationExists),
 };
