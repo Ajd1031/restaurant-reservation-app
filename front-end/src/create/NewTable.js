@@ -13,15 +13,17 @@ function NewTables() {
   };
 
   // sends a "put" request to the API containing the user created table
-  //STILL NEED TO UPDATE THIS TO ACTUALLY CALL A FUNCTION THAT REFERENCES THE TABLE DATABASE
   const handleSubmit = (event) => {
     event.preventDefault();
 
     const abortController = new AbortController();
     setTableError(null);
-    createTable(newTable, abortController.signal).catch(setTableError);
-    history.push("/");
-    setNewTable(initialValues);
+    createTable(newTable, abortController.signal)
+      .then(() => {
+        history.push("/");
+        setNewTable(initialValues);
+      })
+      .catch(setTableError);
     return () => abortController.abort();
   };
 

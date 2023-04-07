@@ -38,12 +38,12 @@ async function fetchJson(url, options, onCancel) {
     }
 
     const payload = await response.json();
-
     if (payload.error) {
       return Promise.reject({ message: payload.error });
     }
     return payload.data;
   } catch (error) {
+    console.log("FETCH JSON ERROR");
     if (error.name !== "AbortError") {
       console.error(error.stack);
       throw error;
@@ -117,4 +117,30 @@ export async function createTable(newTable, signal) {
 export async function listTables(signal) {
   const url = new URL(`${API_BASE_URL}/tables`);
   return await fetchJson(url, { headers, signal }, []);
+}
+
+/**
+ * Adds reservation_id to existing table
+ * @param reservation_id
+ *  the id of the reservation that will be added to the table
+ * @param table_id
+ *  the id of the table that the reservation id will be added to
+ * @param signal
+ *  optional AbortController.signal
+ * @returns {Promise<Error|*>}
+ *  a promise that resolves to the updated table.
+ */
+export async function updateTable(table_id, reservation_id, signal) {
+  const url = `${API_BASE_URL}/tables/${table_id}/seat`;
+  const options = {
+    method: "PUT",
+    headers,
+    body: JSON.stringify({ data: { reservation_id: reservation_id } }),
+    signal,
+  };
+  let response = await fetchJson(url, options, reservation_id).then((data) =>
+    console.log("UPDATEDATA:", data)
+  );
+  console.log("RESPONSEEE:");
+  return response;
 }

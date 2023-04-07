@@ -3,7 +3,6 @@ const reservationService = require("../reservations/reservations.service");
 const asyncErrorBoundary = require("../errors/asyncErrorBoundary");
 const hasProperties = require("../errors/hasProperties");
 
-
 //Lists all tables
 async function list(req, res) {
   const data = await service.list();
@@ -61,11 +60,11 @@ async function reservationExists(req, res, next) {
   }
 }
 
-//Validates that the table is compatiable with the reservation 
+//Validates that the table is compatiable with the reservation
 async function tableValidator(req, res, next) {
   const table_id = req.params.table_id;
   const foundTable = await service.read(table_id);
-  
+
   if (foundTable.reservation_id) {
     next({
       status: 400,

@@ -9,7 +9,7 @@ function create(newTable) {
 }
 
 function read(table_id) {
-    return knex("tables").select("*").where({ table_id: table_id }).first();
+  return knex("tables").select("*").where({ table_id: table_id }).first();
 }
 
 function update(table_id, reservation_id) {

@@ -98,7 +98,7 @@ async function reservationExists(req, res, next) {
   } else {
     next({
       status: 404,
-      message: "reservation_id does not exist",
+      message: `reservation_id ${reservationId} does not exist`,
     });
   }
 }

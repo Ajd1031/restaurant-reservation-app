@@ -2,12 +2,10 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
-import { today } from "../utils/date-time";
 
 function NewReservation({ setDate }) {
   const history = useHistory();
   const [reservationsError, setReservationsError] = useState(null);
-
   let initialValues = {
     first_name: "",
     last_name: "",
@@ -16,19 +14,21 @@ function NewReservation({ setDate }) {
     reservation_time: "",
     people: 0,
   };
+  const [newReservation, setNewReservation] = useState(initialValues);
 
   // sends a "POST" request to the API containing the user created reservation
   const handleSubmit = (event) => {
     event.preventDefault();
-
     const abortController = new AbortController();
     setReservationsError(null);
-    createReservation(newReservation, abortController.signal).catch(
-      setReservationsError
-    );
-    setDate(newReservation.reservation_date);
-    history.push("/");
-    setNewReservation(initialValues);
+    createReservation(newReservation, abortController.signal)
+      .then(() => {
+        setDate(newReservation.reservation_date);
+        history.push("/");
+        setNewReservation(initialValues);
+      })
+      .catch(setReservationsError);
+
     return () => abortController.abort();
   };
 
@@ -37,55 +37,15 @@ function NewReservation({ setDate }) {
     history.goBack();
   }
 
-  const [newReservation, setNewReservation] = useState(initialValues);
-  console.log(newReservation);
-
   //saves any chages the user makes to the form
   const handleChange = ({ target }) => {
     setNewReservation({ ...newReservation, [target.name]: target.value });
   };
 
-  let date = new Date(newReservation.reservation_date);
-  let checkToday = new Date(today());
-  let closedError = null;
-  let futureError = null;
-  let compoundError = null;
-
-  //creates error instances if the user enters an invalid reservation date
-  if (date < checkToday && date.getDay() === 1) {
-    compoundError = new Error(
-      "Reservations cannot be for tuesday's & reservation must be for a future date "
-    );
-  } else if (date.getDay() === 1) {
-    closedError = new Error("Reservatons cannot be for tuesday's");
-  } else if (date < checkToday) {
-    futureError = new Error("Reservations must be for a future date");
-  }
-
-  let time = new Date(
-    newReservation.reservation_date + "," + newReservation.reservation_time
-  );
-  let openingTime = new Date(
-    `${newReservation.reservation_date} , 10:30:00`
-  );
-  let closingTime = new Date(
-    `${newReservation.reservation_date}, 21:30:00`
-  );
-
-  //creates an error instance if the user enters an invalid reservation time
-  if (time < openingTime && newReservation.reservation_time) {
-    closedError = new Error("Reservatons cannot be made before 10:30 AM");
-  } else if (time > closingTime ) {
-    futureError = new Error("Reservations cannot be made after 9:30 PM");
-  }
-
   return (
     <div>
       <h2>New Reservation</h2>
       <ErrorAlert error={reservationsError} />
-      {compoundError === null ? null : <ErrorAlert error={compoundError} />}
-      {closedError === null ? null : <ErrorAlert error={closedError} />}
-      {futureError === null ? null : <ErrorAlert error={futureError} />}
       <form onSubmit={handleSubmit}>
         <label>First Name: </label>
         <input
