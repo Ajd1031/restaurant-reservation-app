@@ -3,34 +3,36 @@ import { useHistory, useParams } from "react-router-dom";
 import ErrorAlert from "../layout/ErrorAlert";
 import TableOption from "../tables/TableOption";
 import { updateTable } from "../utils/api";
-import { today } from "../utils/date-time";
+//import { today } from "../utils/date-time";
 
-function NewSeat({ tables, setDate }) {
+function NewSeat({ tables }) {
   const history = useHistory();
   const { reservation_id } = useParams();
   const [seatError, setSeatError] = useState(null);
-  const initialValues = {
-    table_id: 0,
-  };
-  const [tableId, setTableId] = useState(initialValues);
+  //  const initialValues = {
+  //   table_id: 0,
+  // };
+  const [table_id, setTable_id] = useState("");
 
   // sends a "PUT" request to the API to update an existing table
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const abortController = new AbortController();
-    setSeatError(null);
-    updateTable(tableId.table_id, reservation_id, abortController.signal)
-      .then(() => {
-        let date = today();
-        setDate(date);
-        history.push("/");
-        setTableId(initialValues);
-      })
-      .catch((data) => {
-        setSeatError(data);
-      });
-
+    try {
+      await updateTable(table_id, reservation_id, abortController.signal)
+      history.push("/");
+    } catch (error) {
+      setSeatError(error);
+    }
     return () => abortController.abort();
+    // updateTable(tableId.table_id, reservation_id, abortController.signal)
+    //   .then(() => {
+    //     setTableId(initialValues);
+    //     history.push("/");
+    //   })
+    //   .catch((data) => {
+    //     setSeatError(data);
+    //   });
   };
 
   //returns to the perviously visited page if the cancel button is clicked
@@ -40,7 +42,7 @@ function NewSeat({ tables, setDate }) {
 
   //saves any chages the user makes to the form
   const handleChange = ({ target }) => {
-    setTableId({ ...tableId, [target.name]: target.value });
+    setTable_id(target.value);
   };
 
   return (
@@ -48,14 +50,18 @@ function NewSeat({ tables, setDate }) {
       <h2>New Steat</h2>
       <ErrorAlert error={seatError} />
       <form onSubmit={handleSubmit}>
-        <label>Table</label>
+        <label>Table Number</label>
         <select
           name="table_id"
+          className="form-control"
+          required
           onChange={handleChange}
-          value={tableId.table_id}
+          autoFocus
         >
-          <option value={0}>Please pick a table</option>
-          <TableOption tables={tables} />
+          <option value="">Please pick a table</option>
+          {tables.map((table) => (
+            <TableOption key={table.table_id} table={table} />
+          ))}
         </select>
         <button onClick={cancelHandler}>Cancel</button>
         <button type="submit">Submit</button>

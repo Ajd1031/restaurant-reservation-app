@@ -5,8 +5,13 @@ const hasProperties = require("../errors/hasProperties");
 //List all reservations
 async function list(req, res) {
   const { date } = req.query;
-  console.log("DATE:", date);
-  const data = await service.list(date);
+  const { mobile_number } = req.query;
+  let data;
+  if (mobile_number) {
+    data = await service.search(mobile_number);
+  } else {
+    data = await service.list(date);
+  }
 
   res.status(200).json({ data });
 }
@@ -67,14 +72,44 @@ function timeValidation(req, res, next) {
 //Validates the people value
 function peopleValidation(req, res, next) {
   const { data } = req.body;
-  console.log("THISSHOULDBEANUMBER:", data.people);
-  if (isNaN(data.people)) {
+  if (typeof data.people != "number") {
     next({
       status: 400,
       message: `people is not a valid number`,
     });
   } else {
     next();
+  }
+}
+
+function createStatusValidation(req, res, next) {
+  const { data } = req.body;
+
+  if (data.status === "seated") {
+    next({
+      status: 400,
+      message: "new reservations cannot have a status of seated",
+    });
+  } else if (data.status === "finished") {
+    next({
+      status: 400,
+      message: "new reservations cannot have a status of finished",
+    });
+  } else {
+    next();
+  }
+}
+
+function updateStatusValidation(req, res, next) {
+  const { data } = req.body;
+  const acceptedStatus = ["finished", "seated", "booked", "cancelled"];
+  if (acceptedStatus.includes(data.status)) {
+    next();
+  } else {
+    next({
+      status: 400,
+      message: "status unknown",
+    });
   }
 }
 
@@ -90,24 +125,53 @@ const hasRequiredProperties = hasProperties(
 
 //Validates that the reservation_id exists
 async function reservationExists(req, res, next) {
-  const reservationId = req.params.reservationId;
-  const foundReservation = await service.read(reservationId);
-
+  const reservation_id = req.params.reservation_id;
+  const foundReservation = await service.read(reservation_id);
   if (foundReservation) {
-    res.status(200).json({ data: foundReservation });
+    res.locals.foundReservation = foundReservation;
+    next();
   } else {
     next({
       status: 404,
-      message: `reservation_id ${reservationId} does not exist`,
+      message: `reservation_id ${reservation_id} does not exist`,
     });
   }
 }
 
+async function reservationValidator(req, res, next) {
+  const foundReservation = res.locals.foundReservation;
+  foundReservation.status === "finished"
+    ? next({
+        status: 400,
+        message: "a finished reservation cannot be updated",
+      })
+    : next();
+}
+
+function read(req, res) {
+  const foundReservation = res.locals.foundReservation;
+  res.status(200).json({ data: foundReservation });
+}
+
 //Creates a new reservation
 async function create(req, res) {
-  console.log("DATA:", req.body.data);
-  const data = await service.create(req.body.data);
+  const received = req.body.data;
+  const newTable = { ...received, status: "booked" };
+  const data = await service.create(newTable);
   res.status(201).json({ data: data[0] });
+}
+
+async function updateStatus(req, res) {
+  const reservation_id = req.params.reservation_id;
+  const status = req.body.data.status;
+  const data = await service.updateStatus(status, reservation_id);
+  res.status(200).json({ data: data[0] });
+}
+
+async function update(req, res) {
+  const updatedReservation = req.body.data;
+  const data = await service.update(updatedReservation);
+  res.status(200).json({ data: data[0] });
 }
 
 module.exports = {
@@ -117,7 +181,22 @@ module.exports = {
     peopleValidation,
     timeValidation,
     dateValidation,
+    createStatusValidation,
     asyncErrorBoundary(create),
   ],
-  read: asyncErrorBoundary(reservationExists),
+  read: [asyncErrorBoundary(reservationExists), read],
+  updateStatus: [
+    updateStatusValidation,
+    asyncErrorBoundary(reservationExists),
+    reservationValidator,
+    asyncErrorBoundary(updateStatus),
+  ],
+  update: [
+    hasRequiredProperties,
+    peopleValidation,
+    timeValidation,
+    dateValidation,
+    asyncErrorBoundary(reservationExists),
+    asyncErrorBoundary(update),
+  ],
 };

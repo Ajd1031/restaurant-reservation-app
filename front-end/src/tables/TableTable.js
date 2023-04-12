@@ -1,7 +1,7 @@
 import React from "react";
 import TableList from "./TableList";
 //Creates a table to hold the information for tables
-function TableTable({ tables }) {
+function TableTable() {
   return (
     <div>
       <table>
@@ -13,7 +13,7 @@ function TableTable({ tables }) {
           </tr>
         </thead>
         <tbody>
-          <TableList tables={tables} />
+          <TableList />
         </tbody>
       </table>
     </div>

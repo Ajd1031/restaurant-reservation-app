@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createTable } from "../utils/api";
 import ErrorAlert from "../layout/ErrorAlert";
+import { today } from "../utils/date-time";
 
 function NewTables() {
   const history = useHistory();
@@ -15,13 +16,12 @@ function NewTables() {
   // sends a "put" request to the API containing the user created table
   const handleSubmit = (event) => {
     event.preventDefault();
-
     const abortController = new AbortController();
     setTableError(null);
     createTable(newTable, abortController.signal)
       .then(() => {
-        history.push("/");
         setNewTable(initialValues);
+        history.push("/dashboard");
       })
       .catch(setTableError);
     return () => abortController.abort();

@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import { createReservation } from "../utils/api";
-import ErrorAlert from "../layout/ErrorAlert";
+import ReservationForm from "../reservations/ReservationForm";
 
-function NewReservation({ setDate }) {
+function NewReservation() {
   const history = useHistory();
+  const whichForm = "create"
   const [reservationsError, setReservationsError] = useState(null);
   let initialValues = {
     first_name: "",
@@ -13,6 +14,7 @@ function NewReservation({ setDate }) {
     reservation_date: "",
     reservation_time: "",
     people: 0,
+    status: "",
   };
   const [newReservation, setNewReservation] = useState(initialValues);
 
@@ -21,19 +23,21 @@ function NewReservation({ setDate }) {
     event.preventDefault();
     const abortController = new AbortController();
     setReservationsError(null);
+    newReservation.people = Number(newReservation.people)
     createReservation(newReservation, abortController.signal)
       .then(() => {
-        setDate(newReservation.reservation_date);
-        history.push("/");
         setNewReservation(initialValues);
+        history.push(`/dashboard?date=${newReservation.reservation_date}`);
       })
-      .catch(setReservationsError);
+      .catch((error) => {
+        setReservationsError(error);
+      });
 
     return () => abortController.abort();
   };
 
   //returns to the perviously visited page if the cancel button is clicked
-  function cancelHandler() {
+  function handleCancel() {
     history.goBack();
   }
 
@@ -42,69 +46,7 @@ function NewReservation({ setDate }) {
     setNewReservation({ ...newReservation, [target.name]: target.value });
   };
 
-  return (
-    <div>
-      <h2>New Reservation</h2>
-      <ErrorAlert error={reservationsError} />
-      <form onSubmit={handleSubmit}>
-        <label>First Name: </label>
-        <input
-          required
-          name="first_name"
-          type="text"
-          placeholder="First Name"
-          value={newReservation.first_name}
-          onChange={handleChange}
-        />
-        <label>Last Name: </label>
-        <input
-          required
-          name="last_name"
-          type="text"
-          placeholder="Last Name"
-          value={newReservation.last_name}
-          onChange={handleChange}
-        />
-        <label>Phone Number: </label>
-        <input
-          required
-          name="mobile_number"
-          type="tel"
-          pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}"
-          placeholder="123-123-1234"
-          value={newReservation.mobile_number}
-          onChange={handleChange}
-        />
-        <label>Date: </label>
-        <input
-          required
-          name="reservation_date"
-          type="date"
-          //min={today()}
-          value={newReservation.reservation_date}
-          onChange={handleChange}
-        />
-        <label>Time: </label>
-        <input
-          required
-          name="reservation_time"
-          type="time"
-          value={newReservation.reservation_time}
-          onChange={handleChange}
-        />
-        <label>Guests: </label>
-        <input
-          required
-          name="people"
-          type="integer"
-          value={newReservation.people}
-          onChange={handleChange}
-        />
-        <button onClick={cancelHandler}>Cancel</button>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
-  );
+  return <ReservationForm reservationsError={reservationsError} handleSubmit={handleSubmit} newReservation={newReservation} handleChange={handleChange} handleCancel={handleCancel} whichForm={whichForm} />
 }
 
 export default NewReservation;

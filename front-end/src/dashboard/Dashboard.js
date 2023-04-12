@@ -4,6 +4,7 @@ import { previous, next, today } from "../utils/date-time";
 import ErrorAlert from "../layout/ErrorAlert";
 import ReservationTable from "../reservations/ReservationTable";
 import TableTable from "../tables/TableTable";
+import { Link } from "react-router-dom";
 
 /**
  * Defines the dashboard page.
@@ -11,7 +12,7 @@ import TableTable from "../tables/TableTable";
  *  the date for which the user wants to view reservations.
  * @returns {JSX.Element}
  */
-function Dashboard({ date, setDate, tables, tablesError }) {
+function Dashboard({ date, tables, tablesError }) {
   const [reservations, setReservations] = useState([]);
   const [reservationsError, setReservationsError] = useState(null);
 
@@ -28,18 +29,7 @@ function Dashboard({ date, setDate, tables, tablesError }) {
     };
   }
 
-  //Changes which date's reservations are shown
-  const handleDate = (event) => {
-    event.preventDefault();
-    const { value } = event.target;
-    if (value === "previousDate") {
-      setDate(previous(date));
-    } else if (value === "nextDate") {
-      setDate(next(date));
-    } else if (value === "today") {
-      setDate(today());
-    }
-  };
+  
 
   return (
     <main>
@@ -55,21 +45,21 @@ function Dashboard({ date, setDate, tables, tablesError }) {
         <ReservationTable reservations={reservations} />
       )}
       <div>
-        <button onClick={handleDate} value="previousDate">
+        <Link to={`/dashboard?date=${previous(date)}`} value="previousDate">
           previous
-        </button>
-        <button onClick={handleDate} value="nextDate">
+        </Link>
+        <Link to={`/dashboard?date=${next(date)}`} value="nextDate">
           next
-        </button>
-        <button onClick={handleDate} value="today">
+        </Link>
+        <Link to="/dashboard" value="today">
           today
-        </button>
+        </Link>
       </div>
 
       {JSON.stringify(tables) === "[]" ? (
         "There are currently no tables"
       ) : (
-        <TableTable tables={tables} />
+        <TableTable/>
       )}
     </main>
   );

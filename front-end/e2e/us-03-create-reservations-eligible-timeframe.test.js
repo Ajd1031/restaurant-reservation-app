@@ -1,5 +1,5 @@
 const puppeteer = require("puppeteer");
-const { setDefaultOptions } = require('expect-puppeteer');
+const { setDefaultOptions } = require("expect-puppeteer");
 const fs = require("fs");
 const fsPromises = fs.promises;
 
@@ -64,7 +64,7 @@ describe("US-03 - Create reservation on a future, working date - E2E", () => {
         path: ".screenshots/us-02-reservation-almost-closing-before.png",
       });
 
-      // expect(await page.$(".alert-danger")).toBeFalsy();
+      expect(await page.$(".alert-danger")).toBeFalsy();
 
       await page.click("button[type=submit]");
 
@@ -83,7 +83,7 @@ describe("US-03 - Create reservation on a future, working date - E2E", () => {
         path: ".screenshots/us-02-reservation-too-late-before.png",
       });
 
-      // expect(await page.$(".alert-danger")).toBeFalsy();
+      expect(await page.$(".alert-danger")).toBeFalsy();
 
       await page.click("button[type=submit]");
 

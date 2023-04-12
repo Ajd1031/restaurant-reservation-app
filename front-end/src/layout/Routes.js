@@ -6,7 +6,10 @@ import NewTables from "../create/NewTable";
 import Dashboard from "../dashboard/Dashboard";
 import NotFound from "./NotFound";
 import NewReservation from "../create/NewReservation";
+import NewSearch from "../create/NewSearch";
+import EditReservation from "../reservations/EditReservation";
 import { listTables } from "../utils/api";
+import useQuery from "../utils/useQuery";
 
 /**
  * Defines all the routes for the application.
@@ -16,10 +19,11 @@ import { listTables } from "../utils/api";
  * @returns {JSX.Element}
  */
 function Routes() {
-  const [date, setDate] = useState("2020-12-31");
+
+  const query = useQuery();
+  const date = query.get("date") ? query.get("date") : today();
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
-
   useEffect(() => {
     const tableController = new AbortController();
     listTables(tableController.signal).then(setTables).catch(setTablesError);
@@ -39,19 +43,24 @@ function Routes() {
       <Route path="/dashboard">
         <Dashboard
           date={date}
-          setDate={setDate}
           tables={tables}
           tablesError={tablesError}
         />
       </Route>
       <Route path="/reservations/new">
-        <NewReservation setDate={setDate} />
+        <NewReservation />
       </Route>
       <Route path="/tables/new">
         <NewTables />
       </Route>
+      <Route path="/reservations/:reservation_id/edit" >
+        <EditReservation />
+      </Route>
       <Route path="/reservations/:reservation_id/seat">
-        <NewSeat tables={tables} setDate={setDate} />
+        <NewSeat tables={tables} />
+      </Route>
+      <Route path={"/search"} >
+        <NewSearch />
       </Route>
       <Route>
         <NotFound />
