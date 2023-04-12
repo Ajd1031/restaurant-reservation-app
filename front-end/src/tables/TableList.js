@@ -46,11 +46,11 @@ function TableList() {
   };
 
   // if (tables.length > 0) {
-  return tables.map((table, index) => {
+  return tables.map((table) => {
     //let time = formattableTime(table.table_time)
 
     return (
-      <tr key={index}>
+      <tr key={table.table_id}>
         <ErrorAlert error={tablesError} />
         <ErrorAlert error={removeSeatError} />
         <td>{table.table_name}</td>

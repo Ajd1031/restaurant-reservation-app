@@ -31,10 +31,10 @@ function ReservationList({ reservations }) {
 
   if (reservations.length > 0) {
     <ErrorAlert error={cancelError} />;
-    return reservations.map((reservation, index) => {
+    return reservations.map((reservation) => {
       //let time = formatReservationTime(reservation.reservation_time)
       return (
-        <tr key={index}>
+        <tr key={reservation.reservation_id}>
           <td>{reservation.first_name + " " + reservation.last_name}</td>
           <td>{reservation.mobile_number}</td>
           <td>{reservation.reservation_time}</td>
