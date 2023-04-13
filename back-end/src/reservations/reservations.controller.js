@@ -19,7 +19,7 @@ async function list(req, res) {
 //Validates the reservation_date value
 function dateValidation(req, res, next) {
   const { data } = req.body;
-  let date = new Date(data.reservation_date);
+  let date = new Date(data.reservation_date + "," + data.reservation_time);
   let today = new Date();
   let number = Date.parse(date);
   if (isNaN(number)) {
@@ -32,7 +32,7 @@ function dateValidation(req, res, next) {
       status: 400,
       message: `reservation must be made in the future`,
     });
-  } else if (date.getDay() === 1) {
+  } else if (date.getDay() === 2) {
     next({
       status: 400,
       message: `the restaurant is closed on tuesday`,
@@ -67,6 +67,36 @@ function timeValidation(req, res, next) {
   } else {
     next();
   }
+}
+
+function mobileNumberValidation(req, res, next) {
+  const { data } = req.body;
+  const mobile_number = data.mobile_number;
+  if (!/^[0-9 -]+$/.test(mobile_number)) {
+    return next({
+      status: 400,
+      message: "phone number can only contain numbers",
+    });
+  }
+  next();
+}
+
+function mobileNumberSeachValidation(req, res, next) {
+  const { mobile_number } = req.query;
+  const { date } = req.query;
+
+  if (date) {
+    next();
+    return;
+  }
+
+  if (!/^[0-9 -]+$/.test(mobile_number)) {
+    return next({
+      status: 400,
+      message: "phone number can only contain numbers",
+    });
+  }
+  next();
 }
 
 //Validates the people value
@@ -175,12 +205,13 @@ async function update(req, res) {
 }
 
 module.exports = {
-  list: asyncErrorBoundary(list),
+  list: [mobileNumberSeachValidation, asyncErrorBoundary(list)],
   create: [
     hasRequiredProperties,
     peopleValidation,
     timeValidation,
     dateValidation,
+    mobileNumberValidation,
     createStatusValidation,
     asyncErrorBoundary(create),
   ],
@@ -196,6 +227,7 @@ module.exports = {
     peopleValidation,
     timeValidation,
     dateValidation,
+    mobileNumberValidation,
     asyncErrorBoundary(reservationExists),
     asyncErrorBoundary(update),
   ],

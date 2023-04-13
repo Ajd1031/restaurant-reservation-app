@@ -12,7 +12,6 @@ function NewSearch() {
 
   const handleSubmit = (event) => {
     event.preventDefault();
-    console.log("mobile_number:", mobile_number);
     const abortController = new AbortController();
     setSearchError(null);
     listReservations({ mobile_number }, abortController.signal)
