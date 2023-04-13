@@ -93,7 +93,7 @@ function mobileNumberSeachValidation(req, res, next) {
   if (!/^[0-9 -]+$/.test(mobile_number)) {
     return next({
       status: 400,
-      message: "phone number can only contain numbers",
+      message: "search can only contain phone numbers",
     });
   }
   next();
