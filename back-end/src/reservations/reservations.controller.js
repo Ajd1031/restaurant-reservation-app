@@ -21,7 +21,7 @@ function dateValidation(req, res, next) {
   const { data } = req.body;
   let date = new Date(data.reservation_date + "," + data.reservation_time);
   console.log("DATEEEEE:", date)
-  let today = Date.now();
+  let today = new Date();
   console.log("TODAYYYYYY:", today);
   let number = Date.parse(date);
   if (isNaN(number)) {
