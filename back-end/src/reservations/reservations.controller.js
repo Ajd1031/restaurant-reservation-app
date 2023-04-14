@@ -22,6 +22,7 @@ function dateValidation(req, res, next) {
   let date = new Date(data.reservation_date + "," + data.reservation_time);
   console.log("DATEEEEE:", date)
   let today = Date.now();
+  console.log("TODAYYYYYY:", today);
   let number = Date.parse(date);
   if (isNaN(number)) {
     next({
@@ -99,7 +100,7 @@ function mobileNumberSeachValidation(req, res, next) {
   if (!/^[0-9 -]+$/.test(mobile_number)) {
     return next({
       status: 400,
-      message: "search can only contain phone numbers",
+      message: "search can only contain numbers",
     });
   }
   next();
