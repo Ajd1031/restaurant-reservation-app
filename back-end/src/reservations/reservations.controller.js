@@ -20,7 +20,8 @@ async function list(req, res) {
 function dateValidation(req, res, next) {
   const { data } = req.body;
   let date = new Date(data.reservation_date + "," + data.reservation_time);
-  let today = new Date();
+  console.log("DATEEEEE:", date)
+  let today = Date.now();
   let number = Date.parse(date);
   if (isNaN(number)) {
     next({
@@ -88,6 +89,11 @@ function mobileNumberSeachValidation(req, res, next) {
   if (date) {
     next();
     return;
+  }
+
+  if (!mobile_number) {
+    next();
+    return; 
   }
 
   if (!/^[0-9 -]+$/.test(mobile_number)) {
