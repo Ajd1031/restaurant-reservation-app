@@ -114,6 +114,11 @@ function peopleValidation(req, res, next) {
       status: 400,
       message: `people is not a valid number`,
     });
+  } else if (data.people < 1) {
+    next({
+      status:400,
+      message: "people must be greater than 0"
+    })
   } else {
     next();
   }
