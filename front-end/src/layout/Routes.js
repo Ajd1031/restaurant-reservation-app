@@ -19,11 +19,11 @@ import useQuery from "../utils/useQuery";
  * @returns {JSX.Element}
  */
 function Routes() {
-
   const query = useQuery();
   const date = query.get("date") ? query.get("date") : today();
   const [tables, setTables] = useState([]);
   const [tablesError, setTablesError] = useState(null);
+  console.log("TODAYYYY:", today());
   useEffect(() => {
     const tableController = new AbortController();
     listTables(tableController.signal).then(setTables).catch(setTablesError);
@@ -31,6 +31,8 @@ function Routes() {
       tableController.abort();
     };
   }, [date]);
+
+  console.log("DATE:", date);
 
   return (
     <Switch>

@@ -27,7 +27,7 @@ function NewTables() {
   };
 
   //returns to the perviously visited page if the cancel button is clicked
-  function cancelHandler() {
+  function handleCancel() {
     history.goBack();
   }
 
@@ -38,10 +38,10 @@ function NewTables() {
   };
 
   return (
-    <div>
+    <main>
       <h2>New Table</h2>
       <ErrorAlert error={tableError} />
-      <form onSubmit={handleSubmit}>
+      <form className="group" onSubmit={handleSubmit}>
         <label>Table Name</label>
         <input
           required
@@ -60,10 +60,12 @@ function NewTables() {
           value={newTable.capacity}
           onChange={handleChange}
         />
-        <button onClick={cancelHandler}>Cancel</button>
-        <button type="submit">Submit</button>
+         <div className="group-row">
+            <button className="full item cancel" onClick={handleCancel}>Cancel</button>
+            <button className="full item" type="submit">Submit</button>
+          </div>
       </form>
-    </div>
+    </main>
   );
 }
 

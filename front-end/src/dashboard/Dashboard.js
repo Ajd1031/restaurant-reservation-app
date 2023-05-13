@@ -29,38 +29,66 @@ function Dashboard({ date, tables, tablesError }) {
     };
   }
 
-  
-
   return (
     <main>
-      <h1>Dashboard</h1>
-      <div className="d-md-flex mb-3">
-        <h4 className="mb-0">Reservations for {date}</h4>
+      <div id="error">
+        <ErrorAlert error={reservationsError} />
+        <ErrorAlert error={tablesError} />
       </div>
-      <ErrorAlert error={reservationsError} />
-      <ErrorAlert error={tablesError} />
-      {JSON.stringify(reservations) === "[]" ? (
-        "There are no reservatons for this date."
-      ) : (
-        <ReservationTable reservations={reservations} />
-      )}
-      <div>
-        <Link to={`/dashboard?date=${previous(date)}`} value="previousDate">
-          previous
-        </Link>
-        <Link to={`/dashboard?date=${next(date)}`} value="nextDate">
-          next
-        </Link>
-        <Link to="/dashboard" value="today">
-          today
-        </Link>
+      <div className="group">
+        <div id="reservations" className="item-double">
+          <h2>
+            Reservations for{" "}
+            {new Date(`${date}T${"12:23:23"}`).toLocaleDateString("en-gb", {
+              weekday: "long",
+              month: "short",
+              day: "numeric",
+              year: "numeric",
+            })}
+          </h2>
+          <div className="margin-btm group-row">
+            <Link
+              id="button"
+              className="link item"
+              to={`/dashboard?date=${previous(date)}`}
+              value="previousDate"
+            >
+              previous
+            </Link>
+            <Link
+              id="button"
+              to="/dashboard"
+              value="today"
+              className="link item"
+            >
+              today
+            </Link>
+            <Link
+              id="button"
+              to={`/dashboard?date=${next(date)}`}
+              value="nextDate"
+              className="link item"
+            >
+              next
+            </Link>
+          </div>
+          <hr />
+          {JSON.stringify(reservations) === "[]" ? (
+            <p>No reservations found</p>
+          ) : (
+            <ReservationTable reservations={reservations} />
+          )}
+        </div>
+        <div id="tables" className="item">
+          <h2>Tables</h2>
+          <hr />
+          {JSON.stringify(tables) === "[]" ? (
+            <p>There are currently no tables</p>
+          ) : (
+            <TableTable />
+          )}
+        </div>
       </div>
-
-      {JSON.stringify(tables) === "[]" ? (
-        "There are currently no tables"
-      ) : (
-        <TableTable/>
-      )}
     </main>
   );
 }

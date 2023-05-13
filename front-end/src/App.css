@@ -1,0 +1,253 @@
+/* -------- STRUCTURE -------- */
+
+* {
+  box-sizing: border-box;
+}
+
+main {
+  margin: 30px;
+}
+
+hr {
+  width: 100%;
+  border-style: solid;
+  border-color: #000000;
+  background-color: #000000;
+  border-bottom: 4px solid black;
+  margin: 0px;
+}
+
+.container-fluid {
+  padding: 0;
+}
+
+.center {
+  margin-bottom: 0;
+}
+
+/* ------------ FLEXBOX ------------ */
+
+.group {
+  display: flex;
+  flex-direction: column;
+}
+
+.group-row {
+  display: flex;
+  flex-direction: row;
+}
+
+.nav {
+  display: flex;
+  flex-direction: row;
+  font-family: trajan;
+}
+
+.item {
+  flex: 1;
+}
+
+.item-double {
+  flex: 2;
+}
+
+/* ------------ BUTTONS/LINKS ------------ */
+
+.link {
+  color: #000000;
+  font-family: trajan;
+}
+
+.nav-link {
+  color: black;
+  text-decoration: none;
+  padding-right: 4px;
+  padding-left: 4px;
+}
+
+/* DESKTOP ONLY
+padding right and left used to be 16px
+add to .nav-link
+ padding-top: 20px;
+padding-bottom: 20px;
+
+.longer {
+    padding-right: 30px;
+    padding-left: 30px;
+}
+
+.shorter {
+    padding-top: 8px;
+    padding-bottom: 8px;
+} */
+
+#button {
+  display: flex;
+  padding: 5px 5px 5px 5px;
+  margin: 0px 5px 0 5px;
+  text-decoration: none;
+  text-transform: uppercase;
+  border: solid;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+}
+
+.cancel {
+  display: flex;
+  padding: 5px 5px 5px 5px;
+
+  text-decoration: none;
+  text-transform: uppercase;
+  border: solid;
+  justify-content: center;
+  align-items: center;
+  background-color: red;
+  color: black;
+  border-color: red;
+  border-radius: 10px;
+}
+
+.cancel:hover {
+  background-color: white;
+  color: red;
+}
+
+.edit {
+  display: flex;
+  padding: 5px 18.75px 5px 18.75px;
+
+  text-decoration: none;
+  text-transform: uppercase;
+  border: solid;
+  justify-content: center;
+  align-items: center;
+  background-color: #ffdf00;
+  border-color: #ffdf00;
+  color: black;
+  border-radius: 10px;
+}
+
+.edit:hover {
+  background-color: white;
+  color: #ffdf00;
+}
+
+.confirm {
+  display: flex;
+  padding: 5px 16.8px 5px 16.8px;
+
+  text-decoration: none;
+  text-transform: uppercase;
+  border: solid;
+  justify-content: center;
+  align-items: center;
+  color: black;
+  background-color: #00e0e0;
+  border-color: #00e0e0;
+  border-radius: 10px;
+}
+
+.confirm:hover {
+  background-color: white;
+  color: #00e0e0;
+}
+
+button {
+  display: flex;
+  padding: 5px 5px 5px 5px;
+  margin: 0px 5px 0 5px;
+  text-decoration: none;
+  text-transform: uppercase;
+  border: solid;
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  color: white;
+  border-radius: 10px;
+  font-family: trajan;
+}
+
+#button:hover {
+  background: #00e0e0;
+  color: black;
+  border-color: #00e0e0;
+}
+
+#navElement {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#navElement:hover {
+  background-color: black;
+  color: white;
+}
+
+.nav-link:hover {
+  background-color: black;
+  color: white;
+}
+
+.full {
+  margin: 0px;
+  color: white;
+}
+/* ------------ STYLING ------------ */
+
+html {
+  background-color: white;
+}
+
+div {
+  background-color: white;
+}
+
+nav {
+  border-top: solid;
+  border-bottom: solid;
+}
+
+.margin-btm {
+  margin-bottom: 10px;
+}
+
+table {
+  border-collapse: separate;
+  border-spacing: 10px 0;
+  table-layout: auto;
+  font-family: trajan;
+}
+
+td {
+  padding: 5px 0;
+}
+
+label {
+  font-weight: 600;
+  font-family: trajan;
+}
+
+input {
+  margin: 5px 0px 20px 0px;
+  border: 3px solid black;
+  border-radius: 5px;
+  padding: 5px;
+  font-family: trajan;
+}
+
+#long {
+  white-space: nowrap;
+}
+
+h2, p {
+  font-family: trajan;
+}
+
+.alert {
+  font-family: trajan;
+  font-style: italic;
+}

@@ -36,17 +36,21 @@ function ReservationList({ reservations }) {
       return (
         <tr key={reservation.reservation_id}>
           <td>{reservation.first_name + " " + reservation.last_name}</td>
-          <td>{reservation.mobile_number}</td>
+          <td id="long">{reservation.mobile_number}</td>
           <td>{reservation.reservation_time}</td>
           <td>{reservation.people}</td>
           <td>
-            <p data-reservation-id-status={`${reservation.reservation_id}`}>
+            <p
+              className="center"
+              data-reservation-id-status={`${reservation.reservation_id}`}
+            >
               {`${reservation.status}`}
             </p>
           </td>
           <td>
             {reservation.status === "seated" ? null : (
               <button
+                className="cancel"
                 data-reservation-id-cancel={reservation.reservation_id}
                 value={reservation.reservation_id}
                 onClick={handleCancel}
@@ -57,14 +61,20 @@ function ReservationList({ reservations }) {
           </td>
           <td>
             {reservation.status === "seated" ? null : (
-              <Link to={`/reservations/${reservation.reservation_id}/edit`}>
+              <Link
+                to={`/reservations/${reservation.reservation_id}/edit`}
+                className="link edit"
+              >
                 Edit
               </Link>
             )}
           </td>
           <td>
             {reservation.status === "seated" ? null : (
-              <Link to={`/reservations/${reservation.reservation_id}/seat`}>
+              <Link
+                to={`/reservations/${reservation.reservation_id}/seat`}
+                className="link confirm"
+              >
                 Seat
               </Link>
             )}
