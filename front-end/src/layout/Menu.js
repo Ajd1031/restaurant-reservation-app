@@ -23,12 +23,12 @@ function Menu() {
         <div>
           <ul className="group nav">
             <li id="navElement" className="itempaleturquoise">
-              <Link className="nav-link" to="/dashboard">
+              <Link className="nav-link taller fill" to="/dashboard">
                 Dashboard
               </Link>
             </li>
             <li id="navElement" className="item">
-              <Link className="nav-link longer" to="/search">
+              <Link className="nav-link longer taller" to="/search">
                 Search
               </Link>
             </li>
@@ -38,7 +38,7 @@ function Menu() {
               </Link>
             </li>
             <li id="navElement" className="item">
-              <Link className="nav-link" to="/tables/new">
+              <Link className="nav-link taller fill" to="/tables/new">
                 New Table
               </Link>
             </li>
