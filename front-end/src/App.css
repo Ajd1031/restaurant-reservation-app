@@ -211,7 +211,7 @@ nav {
 }
 
 table {
-  border-collapse: separate;
+  border-collapse: separate; 
   border-spacing: 10px 0;
   table-layout: auto;
   font-family: trajan, helvetica, "Times New Roman";
@@ -230,7 +230,7 @@ input, select {
   margin: 5px 0px 20px 0px;
   border: 3px solid black;
   border-radius: 5px;
-  padding: 5px;
+  padding: 10px;
   font-family: trajan, helvetica, "Times New Roman";
   width: 100%;
 }
