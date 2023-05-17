@@ -19,7 +19,7 @@ function NewSeat({ tables }) {
     event.preventDefault();
     const abortController = new AbortController();
     try {
-      await updateTable(table_id, reservation_id, abortController.signal)
+      await updateTable(table_id, reservation_id, abortController.signal);
       history.push("/");
     } catch (error) {
       setSeatError(error);
@@ -46,27 +46,36 @@ function NewSeat({ tables }) {
   };
 
   return (
-    <div>
-      <h2>New Steat</h2>
-      <ErrorAlert error={seatError} />
-      <form onSubmit={handleSubmit}>
-        <label>Table Number</label>
-        <select
-          name="table_id"
-          className="form-control"
-          required
-          onChange={handleChange}
-          autoFocus
-        >
-          <option value="">Please pick a table</option>
-          {tables.map((table) => (
-            <TableOption key={table.table_id} table={table} />
-          ))}
-        </select>
-        <button onClick={cancelHandler}>Cancel</button>
-        <button type="submit">Submit</button>
-      </form>
-    </div>
+    <main>
+      <div id="error">
+        <ErrorAlert error={seatError} />
+      </div>
+      <div>
+        <h2>New Steat</h2>
+        <form className="group" onSubmit={handleSubmit}>
+          <label>Table Number:</label>
+          <select
+            name="table_id"
+            required
+            onChange={handleChange}
+            autoFocus
+          >
+            <option value="">Please pick a table</option>
+            {tables.map((table) => (
+              <TableOption key={table.table_id} table={table} />
+            ))}
+          </select>
+          <div className="group-row">
+            <button className="full item cancel space" onClick={cancelHandler}>
+              Cancel
+            </button>
+            <button className="full item space" type="submit">
+              submit
+            </button>
+          </div>
+        </form>
+      </div>
+    </main>
   );
 }
 

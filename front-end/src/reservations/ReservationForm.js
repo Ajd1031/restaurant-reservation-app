@@ -74,10 +74,10 @@ function ReservationForm({
             onChange={handleChange}
           />
           <div className="group-row">
-            <button className="full item cancel" onClick={handleCancel}>
+            <button className="full item cancel space" onClick={handleCancel}>
               Cancel
             </button>
-            <button className="full item" type="submit">
+            <button className="full item space" type="submit">
               Submit
             </button>
           </div>
@@ -144,10 +144,10 @@ function ReservationForm({
             onChange={handleChange}
           />
           <div className="group-row">
-            <button className="full item cancel" onClick={handleCancel}>
+            <button className="full item cancel space" onClick={handleCancel}>
               Cancel
             </button>
-            <button className="full item" type="submit">
+            <button className="full item space" type="submit">
               Submit
             </button>
           </div>
