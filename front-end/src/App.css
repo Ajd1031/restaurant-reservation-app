@@ -275,4 +275,8 @@ p {
     padding-right: 15.854px;
     padding-left: 15.854px;
   }
+
+  table {
+    border-spacing: 20px
+  }
 }
